@@ -1,3 +1,5 @@
+![LogHunter Title Card](branding/LogHunter%20Title.png)
+
 # 🔍 LogHunter
 
 **Smart Log Analysis & Pattern Finder**
