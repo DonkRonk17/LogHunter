@@ -1,4 +1,4 @@
-<img width="1536" height="1024" alt="LogHunter Title Card" src="https://github.com/user-attachments/assets/41b360eb-8ac9-4b92-a922-f78dbea8f589" />
+<img width="1536" height="1024" alt="LogHunter Title" src="https://github.com/user-attachments/assets/7bc5a943-3f6b-4bf9-8b39-3f5f052b8591" />
 
 # 🔍 LogHunter
 
@@ -431,8 +431,7 @@ Contributions welcome! Feel free to:
 MIT License - See [LICENSE](LICENSE) file for details.
 
 ---
-<img width="1536" height="1024" alt="LogHunter Title" src="https://github.com/user-attachments/assets/7bc5a943-3f6b-4bf9-8b39-3f5f052b8591" />
-
+<img width="1536" height="1024" alt="LogHunter Title Card" src="https://github.com/user-attachments/assets/41b360eb-8ac9-4b92-a922-f78dbea8f589" />
 
 ## 🏆 Why LogHunter?
 
