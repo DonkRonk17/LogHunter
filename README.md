@@ -431,6 +431,7 @@ Contributions welcome! Feel free to:
 MIT License - See [LICENSE](LICENSE) file for details.
 
 ---
+
 <img width="1536" height="1024" alt="LogHunter Title Card" src="https://github.com/user-attachments/assets/41b360eb-8ac9-4b92-a922-f78dbea8f589" />
 
 ## 🏆 Why LogHunter?
@@ -459,6 +460,14 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 - [Regular Expressions Tutorial](https://regexone.com/)
 - [Log Best Practices](https://www.loggly.com/ultimate-guide/python-logging-basics/)
+
+---
+
+## 🙏 Credits
+
+Created by **Randell Logan Smith and Team Brain** at [Metaphy LLC](https://metaphysicsandcomputing.com)
+
+Part of the HMSS (Heavenly Morning Star System) ecosystem.
 
 ---
 
