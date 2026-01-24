@@ -417,6 +417,8 @@ LogHunter automatically detects common log formats:
 
 ---
 
+<img width="1536" height="1024" alt="LogHunter Title Card" src="https://github.com/user-attachments/assets/41b360eb-8ac9-4b92-a922-f78dbea8f589" />
+
 ## 🤝 Contributing
 
 Contributions welcome! Feel free to:
@@ -431,8 +433,6 @@ Contributions welcome! Feel free to:
 MIT License - See [LICENSE](LICENSE) file for details.
 
 ---
-
-<img width="1536" height="1024" alt="LogHunter Title Card" src="https://github.com/user-attachments/assets/41b360eb-8ac9-4b92-a922-f78dbea8f589" />
 
 ## 🏆 Why LogHunter?
 
