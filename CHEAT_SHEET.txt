@@ -1,0 +1,301 @@
+================================================================================
+                         LOGHUNTER CHEAT SHEET v1.1
+================================================================================
+
+QUICK START
+-----------
+# Install:
+git clone https://github.com/DonkRonk17/LogHunter.git
+cd LogHunter
+pip install -e .
+
+# Basic usage:
+loghunter [command] [files] [options]
+
+================================================================================
+COMMANDS OVERVIEW
+================================================================================
+
+search    - Search logs with regex patterns
+errors    - Show ERROR, FATAL, CRITICAL entries
+warnings  - Show WARN, WARNING entries  
+level     - Filter by specific log levels
+stats     - Show log statistics
+tail      - Show last N lines
+head      - Show first N lines
+time      - Filter by time range
+patterns  - Find common log patterns
+exceptions - Find exceptions and stack traces
+
+================================================================================
+SEARCH COMMAND
+--------------------------------------------------------------------------------
+
+# Basic search
+loghunter search app.log "error"
+
+# Case-insensitive
+loghunter search app.log "error" -i
+
+# Regex search
+loghunter search app.log "connection.*timeout"
+
+# Multi-file search
+loghunter search "*.log" "pattern"
+loghunter search "logs/**/*.log" "pattern"
+
+# With context (3 lines before/after)
+loghunter search app.log "error" -c 3
+
+# Limit results
+loghunter search app.log "error" -l 20
+
+# Combined
+loghunter search app.log "timeout" -i -c 3 -l 10
+
+Options:
+  -i, --ignore-case    Case insensitive search
+  -c, --context N      Show N lines of context
+  -l, --limit N        Limit to N results
+
+================================================================================
+ERRORS / WARNINGS COMMANDS
+--------------------------------------------------------------------------------
+
+# All errors (ERROR, FATAL, CRITICAL)
+loghunter errors app.log
+loghunter errors app.log -l 50
+
+# All warnings (WARN, WARNING)
+loghunter warnings app.log
+loghunter warn app.log           # Short alias
+
+================================================================================
+LEVEL COMMAND
+--------------------------------------------------------------------------------
+
+# Single level
+loghunter level app.log ERROR
+loghunter level app.log DEBUG
+
+# Multiple levels
+loghunter level app.log ERROR WARN
+loghunter level app.log DEBUG INFO
+
+# With limit
+loghunter level app.log ERROR -l 100
+
+Supported Levels:
+  TRACE, DEBUG, INFO, WARN, WARNING, ERROR, FATAL, CRITICAL
+
+================================================================================
+STATS COMMAND
+--------------------------------------------------------------------------------
+
+# Single file
+loghunter stats app.log
+
+# Multiple files
+loghunter stats "*.log"
+loghunter stats "logs/**/*.log"
+
+Output includes:
+  - Total lines and files
+  - Log level distribution
+  - Error/warning/exception counts
+  - Time range covered
+
+================================================================================
+TAIL / HEAD COMMANDS
+--------------------------------------------------------------------------------
+
+# Last 10 lines (default)
+loghunter tail app.log
+
+# Last 50 lines
+loghunter tail app.log -n 50
+
+# First 20 lines
+loghunter head app.log -n 20
+
+================================================================================
+TIME COMMAND
+--------------------------------------------------------------------------------
+
+# Relative time
+loghunter time app.log --since 1h      # Last hour
+loghunter time app.log --since 30m     # Last 30 minutes
+loghunter time app.log --since 2d      # Last 2 days
+loghunter time app.log --since 5s      # Last 5 seconds
+
+# Absolute time (ISO format)
+loghunter time app.log --since 2026-01-10T08:00:00
+loghunter time app.log --until 2026-01-10T17:00:00
+
+# Time range
+loghunter time app.log --since 2026-01-10T08:00:00 --until 2026-01-10T12:00:00
+
+# With limit
+loghunter time app.log --since 1h -l 100
+
+Time Formats:
+  Relative: 1s (seconds), 5m (minutes), 2h (hours), 7d (days)
+  Absolute: YYYY-MM-DDTHH:MM:SS
+
+================================================================================
+PATTERNS COMMAND
+--------------------------------------------------------------------------------
+
+# Top 10 patterns (default)
+loghunter patterns app.log
+
+# Top 20 patterns
+loghunter patterns app.log -n 20
+
+Note: Normalizes timestamps, IPs, numbers to find recurring patterns
+
+================================================================================
+EXCEPTIONS COMMAND
+--------------------------------------------------------------------------------
+
+# Find exceptions and stack traces
+loghunter exceptions app.log
+loghunter exc app.log          # Short alias
+loghunter exc app.log -l 10
+
+Detects: Exception, Error, Traceback, stack trace lines
+
+================================================================================
+GLOB PATTERNS (Multi-File)
+--------------------------------------------------------------------------------
+
+# All .log files in directory
+loghunter search "*.log" "error"
+
+# Recursive (all subdirectories)
+loghunter search "**/*.log" "error"
+
+# Specific pattern
+loghunter search "app-2026-01-*.log" "error"
+
+# Service logs
+loghunter errors "services/**/*.log"
+
+================================================================================
+PYTHON API
+--------------------------------------------------------------------------------
+
+# Import
+from loghunter import LogHunter, parse_time_arg
+
+# Create and load
+hunter = LogHunter()
+hunter.load_file("app.log")
+hunter.load_files("logs/*.log")
+
+# Core methods
+errors = hunter.get_errors()
+warnings = hunter.get_warnings()
+exceptions = hunter.get_exceptions()
+
+# Filtering
+results = hunter.filter_by_level(['ERROR', 'WARN'])
+results = hunter.filter_by_pattern("timeout")
+results = hunter.filter_by_pattern("error", case_sensitive=False)
+results = hunter.filter_by_time_range(start=datetime_obj, end=datetime_obj)
+
+# Analysis
+stats = hunter.get_statistics()
+patterns = hunter.get_top_patterns(10)
+
+# Navigation
+tail = hunter.tail(10)
+head = hunter.head(10)
+context = hunter.context([line_indices], before=3, after=3)
+
+================================================================================
+SHELL INTEGRATION
+--------------------------------------------------------------------------------
+
+# Count errors
+loghunter errors app.log | wc -l
+
+# Save to file
+loghunter errors app.log > errors.txt
+
+# Pipe to grep
+loghunter search app.log "user" | grep "user_123"
+
+# Sort unique messages
+loghunter errors app.log | cut -d: -f3- | sort | uniq -c | sort -rn
+
+# Real-time monitoring (Linux)
+watch -n 5 'loghunter errors app.log --since 5m'
+
+================================================================================
+COMMON WORKFLOWS
+--------------------------------------------------------------------------------
+
+1. QUICK HEALTH CHECK
+   loghunter stats app.log
+
+2. RECENT ERRORS
+   loghunter errors app.log --since 1h
+
+3. DEBUG SPECIFIC ISSUE
+   loghunter search app.log "pattern" -c 5
+
+4. FIND ERROR TRENDS
+   loghunter patterns app.log -n 20
+
+5. MULTI-SERVICE DEBUG
+   loghunter search "services/**/*.log" "request_id=abc123"
+
+================================================================================
+TROUBLESHOOTING
+--------------------------------------------------------------------------------
+
+Issue: "No files found matching: pattern"
+  -> Check path exists and use quotes around glob patterns
+
+Issue: No timestamp detected
+  -> LogHunter supports ISO format (YYYY-MM-DD HH:MM:SS)
+  -> Some custom formats may not be detected
+
+Issue: Wrong encoding
+  -> Use UTF-8 encoded files (default)
+  -> Tool handles encoding errors gracefully
+
+================================================================================
+INTEGRATION WITH TEAM BRAIN TOOLS
+--------------------------------------------------------------------------------
+
+# With SynapseLink (notify team of error count)
+from synapselink import quick_send
+from loghunter import LogHunter
+
+hunter = LogHunter()
+hunter.load_file("app.log")
+errors = hunter.get_errors()
+quick_send("TEAM", "Error Report", f"Found {len(errors)} errors in app.log")
+
+# With TokenTracker (log analysis as tracked task)
+from tokentracker import TokenTracker
+tracker = TokenTracker()
+# ... use LogHunter ...
+tracker.log_usage("ATLAS", "loghunter", 0, 0, "Analyzed production logs")
+
+================================================================================
+RESOURCES
+--------------------------------------------------------------------------------
+
+Documentation:  AutoProjects/LogHunter/README.md
+Examples:       AutoProjects/LogHunter/EXAMPLES.md
+Integration:    AutoProjects/LogHunter/INTEGRATION_PLAN.md
+GitHub:         https://github.com/DonkRonk17/LogHunter
+Issues:         https://github.com/DonkRonk17/LogHunter/issues
+
+================================================================================
+                    LogHunter - Smart Log Analysis & Pattern Finder
+                    Zero dependencies | Cross-platform | Blazing fast
+================================================================================

@@ -2,6 +2,12 @@
 """
 LogHunter - Smart Log Analysis & Pattern Finder
 Parse, analyze, and extract insights from log files. Zero dependencies!
+
+Author: Atlas (Team Brain)
+For: Logan Smith / Metaphy LLC  
+Version: 1.1.0
+Date: January 2026
+License: MIT
 """
 
 import os
@@ -93,20 +99,20 @@ class LogHunter:
                 for line_num, line in enumerate(f, 1):
                     self.lines.append(LogLine(line, line_num, file_path))
         except Exception as e:
-            print(f"⚠️  Warning: Could not read {file_path}: {e}", file=sys.stderr)
+            print(f"[!] Warning: Could not read {file_path}: {e}", file=sys.stderr)
     
     def load_files(self, pattern: str, encoding: str = 'utf-8'):
         """Load multiple files matching a glob pattern"""
         files = glob.glob(pattern, recursive=True)
         if not files:
-            print(f"❌ No files found matching: {pattern}")
+            print(f"[X] No files found matching: {pattern}")
             return
         
-        print(f"📂 Loading {len(files)} file(s)...")
+        print(f"[LOAD] Loading {len(files)} file(s)...")
         for file_path in sorted(files):
             self.load_file(file_path, encoding)
         
-        print(f"✅ Loaded {len(self.lines):,} lines from {len(files)} file(s)\n")
+        print(f"[OK] Loaded {len(self.lines):,} lines from {len(files)} file(s)\n")
     
     def filter_by_level(self, levels: List[str]) -> List[LogLine]:
         """Filter lines by log level"""
@@ -230,7 +236,7 @@ def print_lines(lines: List[LogLine], limit: Optional[int] = None, highlight: Op
 
 def print_statistics(stats: Dict):
     """Pretty print statistics"""
-    print("📊 Log Statistics\n")
+    print("[STATS] Log Statistics\n")
     print(f"Total lines:  {stats['total_lines']:,}")
     print(f"Files:        {stats['files']}")
     
@@ -239,12 +245,12 @@ def print_statistics(stats: Dict):
         for level, count in sorted(stats['levels'].items(), key=lambda x: -x[1]):
             print(f"  {level:10} {count:,}")
     
-    print(f"\n⚠️  Warnings:   {stats['warnings']:,}")
-    print(f"❌ Errors:     {stats['errors']:,}")
-    print(f"💥 Exceptions: {stats['exceptions']:,}")
+    print(f"\n[!] Warnings:   {stats['warnings']:,}")
+    print(f"[X] Errors:     {stats['errors']:,}")
+    print(f"[!!] Exceptions: {stats['exceptions']:,}")
     
     if 'time_start' in stats:
-        print(f"\n📅 Time Range:")
+        print(f"\n[TIME] Time Range:")
         print(f"  Start: {stats['time_start']}")
         print(f"  End:   {stats['time_end']}")
         print(f"  Span:  {stats['time_span']}")
@@ -361,7 +367,7 @@ Examples:
     hunter.load_files(args.files)
     
     if not hunter.lines:
-        print("❌ No log data loaded")
+        print("[X] No log data loaded")
         return
     
     # Execute command
@@ -373,7 +379,7 @@ Examples:
             indices = [hunter.lines.index(line) for line in results]
             results = hunter.context(indices, before=args.context, after=args.context)
         
-        print(f"🔍 Found {len(results)} result(s)\n")
+        print(f"[SEARCH] Found {len(results)} result(s)\n")
         
         # Highlight pattern
         flags = 0 if not args.ignore_case else re.IGNORECASE
@@ -383,17 +389,17 @@ Examples:
     
     elif args.command == 'errors':
         results = hunter.get_errors()
-        print(f"❌ Found {len(results)} error(s)\n")
+        print(f"[X] Found {len(results)} error(s)\n")
         print_lines(results, limit=args.limit)
     
     elif args.command in ['warnings', 'warn']:
         results = hunter.get_warnings()
-        print(f"⚠️  Found {len(results)} warning(s)\n")
+        print(f"[!] Found {len(results)} warning(s)\n")
         print_lines(results, limit=args.limit)
     
     elif args.command == 'level':
         results = hunter.filter_by_level(args.levels)
-        print(f"📋 Found {len(results)} line(s) with level(s): {', '.join(args.levels)}\n")
+        print(f"[LEVEL] Found {len(results)} line(s) with level(s): {', '.join(args.levels)}\n")
         print_lines(results, limit=args.limit)
     
     elif args.command == 'stats':
@@ -402,12 +408,12 @@ Examples:
     
     elif args.command == 'tail':
         results = hunter.tail(args.lines)
-        print(f"📄 Last {len(results)} line(s)\n")
+        print(f"[TAIL] Last {len(results)} line(s)\n")
         print_lines(results)
     
     elif args.command == 'head':
         results = hunter.head(args.lines)
-        print(f"📄 First {len(results)} line(s)\n")
+        print(f"[HEAD] First {len(results)} line(s)\n")
         print_lines(results)
     
     elif args.command == 'time':
@@ -415,19 +421,19 @@ Examples:
         end_time = parse_time_arg(args.until) if args.until else None
         
         results = hunter.filter_by_time_range(start=start_time, end=end_time)
-        print(f"📅 Found {len(results)} line(s) in time range\n")
+        print(f"[TIME] Found {len(results)} line(s) in time range\n")
         print_lines(results, limit=args.limit)
     
     elif args.command == 'patterns':
         patterns = hunter.get_top_patterns(args.top)
-        print(f"🔍 Top {len(patterns)} Common Patterns\n")
+        print(f"[PATTERNS] Top {len(patterns)} Common Patterns\n")
         
         for i, (pattern, count) in enumerate(patterns, 1):
             print(f"{i}. ({count:,}×) {pattern[:100]}")
     
     elif args.command in ['exceptions', 'exc']:
         results = hunter.get_exceptions()
-        print(f"💥 Found {len(results)} exception(s)\n")
+        print(f"[EXC] Found {len(results)} exception(s)\n")
         print_lines(results, limit=args.limit)
 
 
@@ -435,7 +441,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n👋 LogHunter closed")
+        print("\n\nLogHunter closed")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[X] Error: {e}")
         sys.exit(1)

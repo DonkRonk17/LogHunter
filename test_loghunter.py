@@ -70,7 +70,7 @@ class TestLogHunter:
         with open(log2_path, 'w', encoding='utf-8') as f:
             f.write(SAMPLE_LOG_2)
         
-        print(f"📁 Test directory: {self.test_dir}")
+        print(f"[DIR] Test directory: {self.test_dir}")
     
     def teardown(self):
         """Clean up test directory"""
@@ -80,10 +80,10 @@ class TestLogHunter:
     def assert_equal(self, actual, expected, test_name):
         """Assert equality"""
         if actual == expected:
-            print(f"✅ {test_name}")
+            print(f"[OK] {test_name}")
             self.passed += 1
         else:
-            print(f"❌ {test_name}")
+            print(f"[X] {test_name}")
             print(f"   Expected: {expected}")
             print(f"   Got: {actual}")
             self.failed += 1
@@ -91,25 +91,25 @@ class TestLogHunter:
     def assert_true(self, condition, test_name):
         """Assert true"""
         if condition:
-            print(f"✅ {test_name}")
+            print(f"[OK] {test_name}")
             self.passed += 1
         else:
-            print(f"❌ {test_name}")
+            print(f"[X] {test_name}")
             self.failed += 1
     
     def assert_greater(self, actual, minimum, test_name):
         """Assert greater than"""
         if actual > minimum:
-            print(f"✅ {test_name}")
+            print(f"[OK] {test_name}")
             self.passed += 1
         else:
-            print(f"❌ {test_name}")
+            print(f"[X] {test_name}")
             print(f"   Expected > {minimum}, got {actual}")
             self.failed += 1
     
     def test_load_single_file(self):
         """Test loading a single log file"""
-        print("\n📂 Test: Load Single File")
+        print("\n[TEST] Load Single File")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -120,7 +120,7 @@ class TestLogHunter:
     
     def test_load_multiple_files(self):
         """Test loading multiple files with glob"""
-        print("\n📂 Test: Load Multiple Files")
+        print("\n[TEST] Load Multiple Files")
         
         hunter = LogHunter()
         pattern = str(Path(self.test_dir) / "*.log")
@@ -134,7 +134,7 @@ class TestLogHunter:
     
     def test_timestamp_extraction(self):
         """Test timestamp parsing"""
-        print("\n⏰ Test: Timestamp Extraction")
+        print("\n[TEST] Timestamp Extraction")
         
         line = LogLine("2026-01-10 10:00:00 INFO Test", 1, "test.log")
         
@@ -145,7 +145,7 @@ class TestLogHunter:
     
     def test_log_level_extraction(self):
         """Test log level parsing"""
-        print("\n📋 Test: Log Level Extraction")
+        print("\n[TEST] Log Level Extraction")
         
         test_cases = [
             ("2026-01-10 10:00:00 ERROR Test", "ERROR"),
@@ -160,7 +160,7 @@ class TestLogHunter:
     
     def test_filter_by_level(self):
         """Test filtering by log level"""
-        print("\n🔍 Test: Filter by Level")
+        print("\n[TEST] Filter by Level")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -177,7 +177,7 @@ class TestLogHunter:
     
     def test_filter_by_pattern(self):
         """Test pattern matching"""
-        print("\n🔍 Test: Filter by Pattern")
+        print("\n[TEST] Filter by Pattern")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -197,7 +197,7 @@ class TestLogHunter:
     
     def test_get_errors(self):
         """Test error extraction"""
-        print("\n❌ Test: Get Errors")
+        print("\n[TEST] Get Errors")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -214,7 +214,7 @@ class TestLogHunter:
     
     def test_get_warnings(self):
         """Test warning extraction"""
-        print("\n⚠️  Test: Get Warnings")
+        print("\n[TEST] Get Warnings")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -225,7 +225,7 @@ class TestLogHunter:
     
     def test_get_exceptions(self):
         """Test exception detection"""
-        print("\n💥 Test: Get Exceptions")
+        print("\n[TEST] Get Exceptions")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -240,7 +240,7 @@ class TestLogHunter:
     
     def test_statistics(self):
         """Test statistics generation"""
-        print("\n📊 Test: Statistics")
+        print("\n[TEST] Statistics")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -256,7 +256,7 @@ class TestLogHunter:
     
     def test_tail_head(self):
         """Test tail and head functions"""
-        print("\n📄 Test: Tail and Head")
+        print("\n[TEST] Tail and Head")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -274,7 +274,7 @@ class TestLogHunter:
     
     def test_time_filtering(self):
         """Test time range filtering"""
-        print("\n⏰ Test: Time Filtering")
+        print("\n[TEST] Time Filtering")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -292,7 +292,7 @@ class TestLogHunter:
     
     def test_parse_relative_time(self):
         """Test relative time parsing"""
-        print("\n⏰ Test: Parse Relative Time")
+        print("\n[TEST] Parse Relative Time")
         
         # Test various formats
         now = datetime.now()
@@ -311,7 +311,7 @@ class TestLogHunter:
     
     def test_pattern_analysis(self):
         """Test common pattern finding"""
-        print("\n🔍 Test: Pattern Analysis")
+        print("\n[TEST] Pattern Analysis")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -325,7 +325,7 @@ class TestLogHunter:
     
     def test_context(self):
         """Test context retrieval"""
-        print("\n📋 Test: Context Retrieval")
+        print("\n[TEST] Context Retrieval")
         
         hunter = LogHunter()
         log_path = Path(self.test_dir) / "app.log"
@@ -340,7 +340,7 @@ class TestLogHunter:
     def run_all(self):
         """Run all tests"""
         print("\n" + "="*60)
-        print("🧪 LogHunter Test Suite")
+        print("[TEST SUITE] LogHunter Test Suite")
         print("="*60)
         
         self.setup()
@@ -366,14 +366,14 @@ class TestLogHunter:
         
         # Summary
         print("\n" + "="*60)
-        print(f"📊 Test Results: {self.passed} passed, {self.failed} failed")
+        print(f"[RESULTS] Test Results: {self.passed} passed, {self.failed} failed")
         print("="*60)
         
         if self.failed == 0:
-            print("\n✅ All tests passed!\n")
+            print("\n[OK] All tests passed!\n")
             return 0
         else:
-            print(f"\n❌ {self.failed} test(s) failed\n")
+            print(f"\n[X] {self.failed} test(s) failed\n")
             return 1
 
 
